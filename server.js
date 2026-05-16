@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import { connectToDB } from "./config/db.js";
 import dotenv from "dotenv";
 import User from "./models/user.model.js";
@@ -23,6 +24,19 @@ const PORT = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
     res.send("Chobbighor!")
+});
+
+app.get("/api/ping", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+app.get("/api/health", (req, res) => {
+  const states = { 0: "disconnected", 1: "connected", 2: "connecting", 3: "disconnecting" };
+  res.status(200).json({
+    server: "ok",
+    database: states[mongoose.connection.readyState],
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Auth middleware — reuse across routes
