@@ -79,8 +79,8 @@ app.post("/api/signup", async (req, res) => {
 
             res.cookie("token", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict"
+                secure: true,
+                sameSite: "none"
             })
         }
 
@@ -128,8 +128,8 @@ app.post("/api/login", async (req, res) => {
 
             res.cookie("token", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict"
+                secure: true,
+                sameSite: "none"
             })
         }
 
@@ -184,7 +184,11 @@ app.get("/api/fetch-user", async (req, res) => {
 });
 
 app.post("/api/logout", async (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+});
     res.status(200).json({
         message: "Logged out successfully"
     })
@@ -391,7 +395,11 @@ app.put("/api/user/update-password", authMiddleware, async (req, res) => {
 app.delete("/api/user/delete-account", authMiddleware, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.userId);
-    res.clearCookie("token");
+    res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+});
     return res.status(200).json({ message: "Account deleted successfully." });
   } catch (error) {
     return res.status(500).json({ message: error.message });
