@@ -1,2 +1,2 @@
-# Chhobi
-A Movie Website
+# Chhobighor project link :- https://chhobi-frontend.vercel.app
+
